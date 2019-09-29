@@ -8,11 +8,8 @@ const worker = new TesseractWorker();
 
 //6:09: Storage
 const storage = multer.diskStorage({
-    destination: (req, res, cb) => {
-        cb(null, '/uploads');
-    },
-    filename: (req, res, cb) => {
-        cb(null, req.file);
+    destination: (req, file, cb) => {
+        cb(null, './uploads');
     }
 });
 const upload = multer({storage: storage}).single('avatar'); //7:19
@@ -26,16 +23,16 @@ app.get('/', (req, res) => {
 });
 
 //16:10
-app.get('/upload', (req, res) => {
+app.post('/upload', (req, res) => {
     upload(req, res, err => {
         console.log(req.file);
     });
 });
 
 //10:10
-app.get('/uploads', (req, res) => {
-    console.log('uploads');
-})
+// app.get('/uploads', (req, res) => {
+//     console.log('uploads');
+// });
 
 //11:46: Start up our server
 const PORT = 5000 || process.env.PORT;
