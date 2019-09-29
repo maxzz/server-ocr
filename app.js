@@ -19,6 +19,7 @@ const upload = multer({storage: storage}).single('avatar'); //7:19
 
 //8:45
 app.set('view engine', 'ejs');
+app.use(express.static('public')); //25:49
 
 //14:53 Routes
 app.get('/', (req, res) => {
