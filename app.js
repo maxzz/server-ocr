@@ -10,6 +10,9 @@ const worker = new TesseractWorker();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
     }
 });
 const upload = multer({storage: storage}).single('avatar'); //7:19
@@ -25,7 +28,23 @@ app.get('/', (req, res) => {
 //16:10
 app.post('/upload', (req, res) => {
     upload(req, res, err => {
-        console.log(req.file);
+        //console.log(req.file);
+        fs.readFile(`./uploads/${req.file.originalname}`, (err, data) => {
+            if (err) {
+                console.log(`tm: Error`, err);
+                return;
+            }
+
+            worker
+                .recognize(data, 'eng', {tessjs_create_pdf: '1'})
+                .progress(progress => {
+                    console.log(`progress `, progress);
+                })
+                .then(result => {
+                    res.send(result.text);
+                })
+                .finally(() => worker.terminate()); // 22:23
+        });
     });
 });
 
