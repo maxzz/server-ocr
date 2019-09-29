@@ -28,10 +28,14 @@ app.get('/', (req, res) => {
 //16:10
 app.post('/upload', (req, res) => {
     upload(req, res, err => {
+        if (err) {
+            console.log(`tm: upload error`, err);
+            return;
+        }
         //console.log(req.file);
         fs.readFile(`./uploads/${req.file.originalname}`, (err, data) => {
             if (err) {
-                console.log(`tm: Error`, err);
+                console.log(`tm: read error`, err);
                 return;
             }
 
@@ -41,11 +45,25 @@ app.post('/upload', (req, res) => {
                     console.log(`progress `, progress);
                 })
                 .then(result => {
-                    res.send(result.text);
+                    console.log('tesseract redirect');
+                    //res.send(result.text);
+                    res.redirect('/download');
                 })
-                .finally(() => worker.terminate()); // 22:23
+                .catch(err => {
+                    console.log(`tm: tesseract error`, err);
+                })
+                .finally(() => {
+                    console.log('tesseract done');
+                    worker.terminate();
+                }); // 22:23
         });
     });
+});
+
+//23:52
+app.get('/download', (req, res) => {
+    const filename = `${__dirname}/tesseract.js-ocr-result.pdf`;
+    res.download(filename);
 });
 
 //10:10
