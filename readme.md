@@ -18,4 +18,5 @@ yarn add nodemon -D
 ```c
 //Y: 'node.js OCR'
 //G: 'npm tesseract.js'
+//I: 'ocr text recognition'
 ```
