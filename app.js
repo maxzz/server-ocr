@@ -3,8 +3,18 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const multer = require('multer');
-const { TesseractWorker } = require('tesseract.js'); // In 2.1.4: const { createWorker } = require('tesseract.js'); const worker = createWorker();
+
+// In 2.1.4:
+/**/
+const { createWorker } = require('tesseract.js');
+const worker = createWorker();
+/**/
+
+// In 2.0.0:
+/** /
+const { TesseractWorker } = require('tesseract.js');
 const worker = new TesseractWorker();
+/**/
 
 //6:09: Storage
 const storage = multer.diskStorage({
