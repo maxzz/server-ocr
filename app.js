@@ -7,7 +7,9 @@ const multer = require('multer');
 // In 2.1.4:
 /** /
 const { createWorker } = require('tesseract.js');
-const worker = createWorker();
+const worker = createWorker({
+    logger: progress => console.log('progress', progress)
+});
 /**/
 
 // In 2.0.0:
@@ -52,9 +54,12 @@ app.post('/upload', (req, res) => {
 
             worker
                 .recognize(data, 'eng', { tessjs_create_pdf: '1' })
+                //not for 2.1.4
+                /**/
                 .progress((progress) => {
                     console.log(`progress `, progress);
                 })
+                /**/
                 .then((result) => {
                     console.log('tesseract redirect');
                     //res.send(result.text);
