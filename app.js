@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const multer = require('multer');
-const { TesseractWorker } = require('tesseract.js');
+const { TesseractWorker } = require('tesseract.js'); // In 2.1.4: const { createWorker } = require('tesseract.js'); const worker = createWorker();
 const worker = new TesseractWorker();
 
 //6:09: Storage
@@ -13,9 +13,9 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
-    }
+    },
 });
-const upload = multer({storage: storage}).single('avatar'); //7:19
+const upload = multer({ storage: storage }).single('avatar'); //7:19
 
 //8:45
 app.set('view engine', 'ejs');
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 //16:10
 app.post('/upload', (req, res) => {
-    upload(req, res, err => {
+    upload(req, res, (err) => {
         if (err) {
             console.log(`tm: upload error`, err);
             return;
@@ -41,16 +41,16 @@ app.post('/upload', (req, res) => {
             }
 
             worker
-                .recognize(data, 'eng', {tessjs_create_pdf: '1'})
-                .progress(progress => {
+                .recognize(data, 'eng', { tessjs_create_pdf: '1' })
+                .progress((progress) => {
                     console.log(`progress `, progress);
                 })
-                .then(result => {
+                .then((result) => {
                     console.log('tesseract redirect');
                     //res.send(result.text);
                     res.redirect('/download');
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(`tm: tesseract error`, err);
                 })
                 .finally(() => {
