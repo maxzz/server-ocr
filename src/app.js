@@ -1,8 +1,10 @@
 // Imports
-const express = require('express');
-const app = express();
+const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+
+const express = require('express');
+const app = express();
 
 // In 2.1.4:
 /** /
@@ -78,6 +80,7 @@ app.post('/upload', (req, res) => {
 
 //23:52
 app.get('/download', (req, res) => {
+    //const filename =  path.join(__dirname, '..', 'tesseract.js-ocr-result.pdf');
     const filename = `${__dirname}/tesseract.js-ocr-result.pdf`;
     res.download(filename);
 });
