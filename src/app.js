@@ -9,7 +9,7 @@ const app = express();
 // In 2.1.4:
 /** /
 const { createWorker } = require('tesseract.js');
-const worker = createWorker({
+const tesseractWorker = createWorker({
     logger: progress => console.log('progress', progress)
 });
 /**/
@@ -17,7 +17,7 @@ const worker = createWorker({
 // In 2.0.0:
 /**/
 const { TesseractWorker } = require('tesseract.js');
-const worker = new TesseractWorker();
+const tesseractWorker = new TesseractWorker();
 /**/
 
 //6:09: Storage
@@ -54,7 +54,7 @@ app.post('/upload', (req, res) => {
                 return;
             }
 
-            worker
+            tesseractWorker
                 .recognize(data, 'eng', { tessjs_create_pdf: '1' })
                 //not for 2.1.4
                 /**/
@@ -72,7 +72,7 @@ app.post('/upload', (req, res) => {
                 })
                 .finally(() => {
                     console.log('tesseract done');
-                    worker.terminate();
+                    tesseractWorker.terminate();
                 }); // 22:23
         });
     });
